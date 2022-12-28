@@ -1,12 +1,20 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 )
 
+var port int
+
+func init() {
+	flag.IntVar(&port, "port", 40000, "port")
+}
+
 func main() {
+	flag.Parse()
 	router := gin.Default()
 
 	router.GET("/download/:file", Download)
@@ -14,7 +22,7 @@ func main() {
 	router.GET("/ping", func(c *gin.Context) {
 		c.String(200, "pong")
 	})
-	Must(router.Run())
+	Must(router.Run(fmt.Sprintf(":%d", port)))
 }
 
 func Download(ctx *gin.Context) {
